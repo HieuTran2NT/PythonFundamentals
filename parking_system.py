@@ -41,7 +41,7 @@ class ParkingRate:
             '00:00-07:59': {'max_hours': None, 'rate': 20.00, 'flat': True}
         }
     }
-
+    # Helper function to determine time slot
     @staticmethod
     def get_time_slot(hour_minute):
         if time(8, 0) <= hour_minute <= time(16, 59):
@@ -50,29 +50,33 @@ class ParkingRate:
             return '17:00-23:59'
         else:
             return '00:00-07:59'
-
+    # Function to calculate parking fee with rules
     @classmethod
     def calculate_fee(cls, arrival_time, current_time, has_discount=False):
         total_fee = Decimal('0.00')
         time_cursor = arrival_time
-
+        # Gets the day of the week and time slot.
         while time_cursor < current_time:
+            # Retrieves the rate info from the rate_table.
             day_name = time_cursor.strftime("%A")
             time_slot = cls.get_time_slot(time_cursor.time())
+            # Retrieves the rate info from the rate_table.
             rate_info = cls.rate_table[day_name][time_slot]
-
+            # If it's a flat rate, use it directly.Otherwise, apply rules like doubling the fee if the max allowed hours are exceeded.
             if rate_info.get('flat'):
                 fee = Decimal(str(rate_info['rate']))
             else:
                 fee = Decimal(str(rate_info['rate']))
+                # Dynamically calculate max_hours for 17:00–23:59 slot                
                 if time_slot == '17:00-23:59':
                     midnight = datetime.combine(time_cursor.date(), time(23, 59))
                     max_hours = (midnight - time_cursor).total_seconds() / 3600
                 else:
                     max_hours = rate_info['max_hours']
+                # Double charge for exceeding max stay
                 if max_hours is not None and (current_time - arrival_time).total_seconds() / 3600 > max_hours:
                     fee *= 2
-
+            # Apply discount                    
             if has_discount:
                 if time_slot in ['17:00-23:59', '00:00-07:59']:
                     fee *= Decimal('0.5')
