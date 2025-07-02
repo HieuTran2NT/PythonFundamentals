@@ -55,33 +55,54 @@ class ParkingRate:
     def calculate_fee(cls, arrival_time, current_time, has_discount=False):
         total_fee = Decimal('0.00')
         time_cursor = arrival_time
+        midnight_days_charged = set()
         # Gets the day of the week and time slot.
         while time_cursor < current_time:
             # Retrieves the rate info from the rate_table.
             day_name = time_cursor.strftime("%A")
+            date_str = time_cursor.strftime("%Y-%m-%d")
             time_slot = cls.get_time_slot(time_cursor.time())
             # Retrieves the rate info from the rate_table.
             rate_info = cls.rate_table[day_name][time_slot]
+            # print("caculating for time slot", time_slot)
             # If it's a flat rate, use it directly.Otherwise, apply rules like doubling the fee if the max allowed hours are exceeded.
             if rate_info.get('flat'):
-                fee = Decimal(str(rate_info['rate']))
+                if date_str not in midnight_days_charged:
+                    fee = Decimal(str(rate_info['rate']))
+                    # print(f"✅ Flat fee of $20 applied for 00:00-07:59 on {time_cursor.date()}")
+                    # Apply discount for flat rate
+                    if has_discount:
+                        fee *= Decimal('0.5')
+                        # print("✅ 50% discount applied to flat fee:", fee)                    
+                    total_fee += fee
+                    midnight_days_charged.add(date_str)
+                time_cursor += timedelta(hours=1)
+                continue                
             else:
                 fee = Decimal(str(rate_info['rate']))
-                # Dynamically calculate max_hours for 17:00–23:59 slot                
-                if time_slot == '17:00-23:59':
-                    midnight = datetime.combine(time_cursor.date(), time(23, 59))
-                    max_hours = (midnight - time_cursor).total_seconds() / 3600
-                else:
-                    max_hours = rate_info['max_hours']
-                # Double charge for exceeding max stay
-                if max_hours is not None and (current_time - arrival_time).total_seconds() / 3600 > max_hours:
+                max_hours = rate_info['max_hours']
+                slot_end_time = {
+                        '08:00-16:59': time(17, 0),
+                        '17:00-23:59': time(23, 59)
+                    }[time_slot]
+                slot_end = datetime.combine(time_cursor.date(), slot_end_time)
+                actual_end = min(current_time, slot_end)                
+                # print("max hours:", max_hours)
+                hours_in_slot = int((actual_end - time_cursor).total_seconds() / 3600)  
+                
+                # print("deltatime:", hours_in_slot)
+                if max_hours is not None and hours_in_slot > max_hours:
                     fee *= 2
+                # print("fee per hour:", fee)
+
             # Apply discount                    
             if has_discount:
                 if time_slot in ['17:00-23:59', '00:00-07:59']:
                     fee *= Decimal('0.5')
+                    # print("fee discount per hour:", fee)    
                 else:
                     fee *= Decimal('0.9')
+                    # print("fee discount per hour:", fee)    
 
             total_fee += fee
             time_cursor += timedelta(hours=1)
