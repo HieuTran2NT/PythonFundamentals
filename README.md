@@ -34,3 +34,31 @@ The system generates a file named `<car_identity>.txt` containing:
 
 #### Example Output File (`59C-12345.txt`)
 
+# 🅿️ Parking Regulation Pricing
+
+This table outlines the parking regulations and pricing based on the day of the week and time of day.
+
+| Day of Week | 08:00 - 16:59 (Max Stay / Price per Hour) | 17:00 - Midnight (Max Stay / Price per Hour) | Midnight - 07:59 (Max Stay / One-Time Price) |
+|-------------|-------------------------------------------|----------------------------------------------|----------------------------------------------|
+| Sunday      | 8 hrs / \$2.00                            | Until midnight / \$5.00                      | None / \$20.00                                |
+| Monday      | 2 hrs / \$10.00                           | Until midnight / \$5.00                      | None / \$20.00                                |
+| Tuesday     | 2 hrs / \$10.00                           | Until midnight / \$5.00                      | None / \$20.00                                |
+| Wednesday   | 2 hrs / \$10.00                           | Until midnight / \$5.00                      | None / \$20.00                                |
+| Thursday    | 2 hrs / \$10.00                           | Until midnight / \$5.00                      | None / \$20.00                                |
+| Friday      | 2 hrs / \$10.00                           | Until midnight / \$5.00                      | None / \$20.00                                |
+| Saturday    | 4 hrs / \$3.00                            | Until midnight / \$5.00                      | None / \$20.00                                |
+
+
+## 💡 Notes
+
+- 🚗 **Frequent Parking Discount**  
+  Customers with a valid frequent parking number receive:
+  - **50% discount** for parking during:
+    - **17:00 – Midnight**
+    - **Midnight – 08:00**
+  - **10% discount** for parking during:
+    - **08:00 – 16:59**
+
+- ⏱️ **Overstay Penalty**  
+  Any car parked **beyond the maximum stay hours** will be charged **double the price** for each exceeded hour.
+
