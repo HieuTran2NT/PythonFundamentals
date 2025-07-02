@@ -51,14 +51,11 @@ This table outlines the parking regulations and pricing based on the day of the 
 
 ## 💡 Notes
 
-- 🚗 **Frequent Parking Discount**  
-  Customers with a valid frequent parking number receive:
-  - **50% discount** for parking during:
-    - **17:00 – Midnight**
-    - **Midnight – 08:00**
-  - **10% discount** for parking during:
-    - **08:00 – 16:59**
+- 🚗 **Frequent Parking Discount**:
+Customers with a valid frequent parking number receive:
+    - **50% discount** for parking during: **17:00 – Midnight** and **Midnight – 08:00**
+    - **10% discount** for parking during: **08:00 – 16:59**
 
-- ⏱️ **Overstay Penalty**  
-  Any car parked **beyond the maximum stay hours** will be charged **double the price** for each exceeded hour.
+- ⏱️ **Overstay Penalty**:
+Any car parked **beyond the maximum stay hours** will be charged **double the price** for each exceeded hour.
 
