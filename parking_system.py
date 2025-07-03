@@ -145,13 +145,6 @@ class ParkingSystem:
         self.excess_file = "excess_payments.txt"
 
     def park(self, arrival_time_str, car_identity, fp_number="N/A"):
-        if not Validator.is_valid_datetime(arrival_time_str):
-            raise ValueError("Invalid datetime format.")
-        if not Validator.is_valid_car_identity(car_identity):
-            raise ValueError("Invalid car identity format.")
-        if fp_number != "N/A" and not Validator.is_valid_frequent_number(fp_number):
-            raise ValueError("Invalid frequent parking number.")
-
         with open(self.records_file, "a") as f:
             f.write(f"{arrival_time_str},{car_identity},{fp_number}\n")
 

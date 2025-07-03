@@ -1,7 +1,7 @@
-from parking_system import ParkingSystem
+from parking_system import ParkingSystem, Validator
 
 ps = ParkingSystem()
-
+validator = Validator()
 while True:
     print("\n=== Parking System Menu ===")
     print("1. Park")
@@ -13,8 +13,14 @@ while True:
     try:
         if choice == '1':
             arrival = input("Enter arrival time (YYYY-MM-DD HH:MM): ")
+            if not validator.is_valid_datetime(arrival):
+                raise ValueError("Invalid datetime format.")            
             car_id = input("Enter car identity (e.g., 59C-12345): ")
+            if not validator.is_valid_car_identity(car_id):
+                raise ValueError("Invalid car identity format.")
             fp_number = input("Enter frequent parking number (optional): ").strip() or "N/A"
+            if fp_number != "N/A" and not validator.is_valid_frequent_number(fp_number):
+                    raise ValueError("Invalid frequent parking number.")                    
             ps.park(arrival, car_id, fp_number)
             print("✅ Parked successfully.")
 
